@@ -233,7 +233,7 @@ class RLDSBatchTransformQwen3Token:
             pixel_values=batch_inputs["pixel_values"],
             image_grid_thw=batch_inputs["image_grid_thw"],
             actions=actions,
-            labels=batch_inputs["input_ids"][0].clone(),
+            labels=labels,
             dataset_name=dataset_name,
             latent_action_idx=latent_action_idx,
             latent_action_z=latent_action_z

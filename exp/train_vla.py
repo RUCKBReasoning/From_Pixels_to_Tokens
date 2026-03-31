@@ -203,9 +203,8 @@ def train(cfg: FinetuneConfig) -> None:
 
     # Get VLA Dataset & Collator
     overwatch.info(f"Creating VLA Dataset with Mixture `{cfg.data_mix}`")
-    batch_transform = get_batch_transform(cfg, processor)
     
-    if cfg.vla_id == "token":
+    if cfg.vla_id == "la_tok":
         from latentvla.data_provider.data_utils import RLDSBatchTransformQwen3Token
         batch_transform = RLDSBatchTransformQwen3Token(
             processor=processor,
@@ -214,6 +213,8 @@ def train(cfg: FinetuneConfig) -> None:
             action_encoder=encoder,
             action_vq=vq,
         )
+    else:
+        batch_transform = get_batch_transform(cfg, processor)
     
     vla_dataset = RLDSDataset(
         Path(cfg.data_root_dir),
