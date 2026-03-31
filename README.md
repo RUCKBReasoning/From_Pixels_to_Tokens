@@ -8,7 +8,7 @@
 </div>
 
 <p align="center">
-  <img src="asserts/Figure_1.png" alt="LatentVLA overview" width="100%">
+  <img src="asserts/Figure_1.png" alt="Overview" width="100%">
 </p>
 
 ## Overview
@@ -33,7 +33,7 @@ This project follows two complementary perspectives from the paper:
 ## Method
 
 <p align="center">
-  <img src="asserts/Figure_2.png" alt="LatentVLA architecture" width="100%">
+  <img src="asserts/Figure_2.png" alt="Architecture" width="100%">
 </p>
 
 All methods share the same VLA backbone and action head, and differ only in how latent supervision is injected. The main VLA implementations live in [`latentvla/models/vla`](./latentvla/models/vla).
@@ -122,7 +122,7 @@ cd data_preprocess/action_based_lam
 bash action.sh
 ```
 
-## Training LatentVLA
+## Training
 
 The main training entry is [`exp/train_vla.py`](./exp/train_vla.py).
 
@@ -176,7 +176,7 @@ torchrun --nnodes=1 --nproc_per_node=1 exp/train_vla.py \
   --lr_scheduler_type constant \
   --warmup_ratio 0.03 \
   --save_step 20000 \
-  --wandb_project latentvla \
+  --wandb_project your_project \
   --use_wandb True
 ```
 
