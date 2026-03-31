@@ -1,6 +1,5 @@
 <div align="center">
-  <h1>LatentVLA</h1>
-  <p><strong>From Pixels to Tokens: A Systematic Study of Latent Action Supervision for Vision-Language-Action Models</strong></p>
+  <h1>From Pixels to Tokens: A Systematic Study of Latent Action Supervision for Vision-Language-Action Models</h1>
   <p>
     <a href="#training-latent-action-models"><img alt="latent action models" src="https://img.shields.io/badge/Latent_Action-Image_+_Action-f28c28"></a>
     <a href="#training-latentvla"><img alt="vla training" src="https://img.shields.io/badge/VLA-Qwen3--VL--2B-0f766e"></a>
@@ -14,17 +13,17 @@
 
 ## Overview
 
-LatentVLA studies how latent action supervision can be integrated into Vision-Language-Action (VLA) models under a unified training framework. Instead of treating latent actions as a standalone pretraining problem, this repository focuses on how different latent supervision strategies change downstream VLA policy learning.
+This work studies how latent action supervision can be integrated into Vision-Language-Action (VLA) models under a unified training framework. We focuses on how different latent supervision strategies change downstream VLA policy learning.
 
 Our implementation is built on a shared `Qwen3-VL-2B` backbone and compares four representative strategies:
 
-| Model       | Latent supervision          | Role in VLA training                                             |
-| ----------- | --------------------------- | ---------------------------------------------------------------- |
-| `Baseline`  | None                        | Direct action prediction without latent supervision              |
-| `LA-Align`  | Image-based latent actions  | Align internal VLM action representations with latent embeddings |
-| `LA-Direct` | Image-based latent actions  | Directly decode latent plans as discrete tokens                  |
-| `LA-Cond`   | Image-based latent actions  | Jointly decode latent plans and action representations           |
-| `LA-Tok`    | Action-based latent actions | Map action chunks into discrete latent tokens                    |
+| Model       | Latent supervision          | Role in VLA training                                      |
+| ----------- | --------------------------- | --------------------------------------------------------- |
+| `Baseline`  | None                        | Direct action prediction without latent supervision       |
+| `LA-Align`  | Image-based latent actions  | Align internal VLM representations with latent embeddings |
+| `LA-Direct` | Image-based latent actions  | Directly decode latent actions as discrete tokens         |
+| `LA-Cond`   | Image-based latent actions  | Jointly decode latent actions and action representations  |
+| `LA-Tok`    | Action-based latent actions | Map actions into discrete latent tokens                   |
 
 This project follows two complementary perspectives from the paper:
 
@@ -55,12 +54,12 @@ The repository assumes RLDS-style datasets for both latent action preprocessing 
 
 The image-based latent action model is in [data_preprocess/image_based_lam](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/image_based_lam). It follows a UniVLA-style image-based latent action pipeline and is the part used to produce latent supervision for `LA-Align`, `LA-Direct`, and `LA-Cond`.
 
-Before post-training on your dataset, download the two public UniVLA checkpoints:
+Before post-training on your dataset, download the two public [UniVLA checkpoints](https://github.com/OpenDriveLab/UniVLA):
 
 - Stage-1 checkpoint
 - Stage-2 checkpoint
 
-These checkpoints are used as initialization because this repository performs dataset-specific post-training rather than training the image-based latent model entirely from scratch.
+These checkpoints are used as initialization because it performs dataset-specific post-training rather than training the image-based latent model entirely from scratch.
 
 #### Training
 
@@ -127,7 +126,7 @@ bash action.sh
 
 The main training entry is [exp/train_vla.py](/Users/linyihan/Documents/GitHub/LatentVLA/exp/train_vla.py).
 
-Before VLA training, first download the `Qwen3-VL-2B` checkpoint and set:
+Before VLA training, first download the `Qwen3-VL-2B` [checkpoint](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) and set:
 
 ```bash
 --vlm_path /path/to/Qwen3-VL-2B
@@ -160,7 +159,7 @@ torchrun --nnodes=1 --nproc_per_node=1 exp/train_vla.py \
   --vlm_model_id Qwen3 \
   --default_image_size 224 \
   --data_root_dir /path/to/rlds_data \
-  --data_mix libero_goal \
+  --data_mix '["libero_goal"]' \
   --shuffle_buffer_size 128 \
   --image_aug True \
   --window_size 8 \
@@ -178,7 +177,6 @@ torchrun --nnodes=1 --nproc_per_node=1 exp/train_vla.py \
   --warmup_ratio 0.03 \
   --save_step 20000 \
   --wandb_project latentvla \
-  --from_pretrained False \
   --use_wandb True
 ```
 
@@ -202,3 +200,7 @@ For `la_tok`, also add:
 - Robot-specific constants are selected in [latentvla/models/constants.py](/Users/linyihan/Documents/GitHub/LatentVLA/latentvla/models/constants.py) by parsing command-line arguments. If your dataset name does not clearly indicate the robot platform, adjust that file manually.
 - The codebase expects RLDS-format training data.
 - Some preprocessing scripts still contain placeholder paths and should be edited before first use.
+
+## Acknowledgements
+
+We thank [OpenVLA](https://github.com/openvla/openvla), [UniVLA](https://github.com/OpenDriveLab/UniVLA), [StarVLA](https://github.com/starVLA/starVLA), and [VLA-Adapter](https://github.com/OpenHelix-Team/VLA-Adapter) for their open-sourced work!
