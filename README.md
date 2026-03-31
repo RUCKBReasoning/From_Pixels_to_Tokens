@@ -54,7 +54,7 @@ The repository assumes RLDS-style datasets for both latent action preprocessing 
 
 The image-based latent action model is in [`data_preprocess/image_based_lam`](./data_preprocess/image_based_lam). It follows a UniVLA-style image-based latent action pipeline and is the part used to produce latent supervision for `LA-Align`, `LA-Direct`, and `LA-Cond`.
 
-Before post-training on your dataset, download the two public [UniVLA checkpoints](https://github.com/OpenDriveLab/UniVLA):
+Before post-training on your dataset, download the two public [UniVLA(RSS2025) checkpoints](https://github.com/OpenDriveLab/UniVLA):
 
 - Stage-1 checkpoint
 - Stage-2 checkpoint
