@@ -175,11 +175,11 @@ def robust_parse_locs(
         headers = ["BBOXES", "FLOW", "AFFORDANCE"]
 
     loc_pattern = re.compile(r"""
-        <?\s*               # 可选尖括号和前空白
-        [lL][oO0][cC]       # loc 忽大小写，O/0 容错
-        [\s_\-]*            # 可选分隔符
-        (\d{1,6})           # 捕获 1~6 位数字
-        \s*>?               # 可选尾尖括号和空白
+        <?\s*               # Optional angle bracket prefix and whitespace
+        [lL][oO0][cC]       # Case-insensitive "loc" with O/0 tolerance
+        [\s_\-]*            # Optional separators
+        (\d{1,6})           # Capture a 1-6 digit location id
+        \s*>?               # Optional angle bracket suffix and whitespace
     """, re.VERBOSE)
     all_items = [(int(m.group(1)), m.start()) for m in loc_pattern.finditer(text)]
     all_locs = [v for v,_ in all_items]
@@ -324,7 +324,7 @@ def extract_qwen25_language_embedding(model, tokenizer, input_language, device):
     start_pos = full_text.find(start_marker)
     end_pos = full_text.find(end_marker, start_pos)
     if start_pos == -1 or end_pos == -1:
-        raise ValueError("无法在文本中找到用户输入标记")
+        raise ValueError("Could not find the user input marker in the text")
     user_text_start = start_pos + len(start_marker)
     user_text = full_text[user_text_start:end_pos].strip()
 

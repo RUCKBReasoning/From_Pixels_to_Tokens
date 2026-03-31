@@ -14,15 +14,15 @@ from accelerate import PartialState
 import glob
 from collections import OrderedDict
 
-from model.overwatch import initialize_overwatch
+from latentvla.overwatch import initialize_overwatch
 from utils.utils import set_global_seed
-from model.models.action_tokenizer import ActionEncoder, VectorQuantizerEMA
-from model.training import AcceleratorStrategy_InternVL
-from model.training.metrics import VLAMetrics
-from model.data_provider.rlds.utils.data_utils import save_dataset_statistics
-from model.data_provider.datasets import RLDSDataset
-from model.data_provider.data_utils import PaddedCollatorForQwen3
-from model.models.vla import Baseline, LA_Cond_VLA, LA_Align_VLA, LA_Direct_VLA, LA_Tok_VLA
+from latentvla.models.action_tokenizer import ActionEncoder, VectorQuantizerEMA
+from latentvla.training import AcceleratorStrategy_InternVL
+from latentvla.training.metrics import VLAMetrics
+from latentvla.data_provider.rlds.utils.data_utils import save_dataset_statistics
+from latentvla.data_provider.datasets import RLDSDataset
+from latentvla.data_provider.data_utils import PaddedCollatorForQwen3
+from latentvla.models.vla import Baseline, LA_Cond_VLA, LA_Align_VLA, LA_Direct_VLA, LA_Tok_VLA
 
 # Sane Defaults
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -120,7 +120,7 @@ def load_vla(cfg, vlm, processor):
     return vla
 
 def get_batch_transform(cfg, processor):
-    from model.data_provider.data_utils import (
+    from latentvla.data_provider.data_utils import (
         RLDSBatchTransformQwen3,
         RLDSBatchTransformQwen3Joint,
         RLDSBatchTransformQwen3Uni,
@@ -156,10 +156,9 @@ def load_action_tokenizer(ckpt_path, device="cuda"):
 @draccus.wrap()
 def train(cfg: FinetuneConfig) -> None:
     overwatch.info("VLA Training ...")
-    constants = importlib.import_module("model.models.constants")
+    constants = importlib.import_module("latentvla.models.constants")
 
     print(f"[INFO] Using VLA config for {cfg.vla_id}:")
-    print(f"  NUM_TOKENS = {constants.NUM_TOKENS}")
     print(f"  ACTION_TOKEN_BEGIN_IDX = {constants.ACTION_TOKEN_BEGIN_IDX}")
 
     # Configure Unique Run Name & Save Directory
@@ -207,7 +206,7 @@ def train(cfg: FinetuneConfig) -> None:
     batch_transform = get_batch_transform(cfg, processor)
     
     if cfg.vla_id == "token":
-        from model.data_provider.data_utils import RLDSBatchTransformQwen3Token
+        from latentvla.data_provider.data_utils import RLDSBatchTransformQwen3Token
         batch_transform = RLDSBatchTransformQwen3Token(
             processor=processor,
             use_wrist_image=cfg.use_wrist_image,

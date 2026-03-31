@@ -1,0 +1,63 @@
+model:
+    image_channels: 3
+
+    lam_model_dim: 768
+    lam_latent_dim: 128
+    lam_num_latents: 16
+    lam_patch_size: 14
+    lam_enc_blocks: 12
+    lam_dec_blocks: 12
+    lam_num_heads: 12
+
+    vq_beta: 0.25
+    action_beta: 0.5
+    log_interval: 5000
+    log_path: ./logs
+    optimizer:
+        class_path: torch.optim.AdamW
+        init_args:
+            lr: 1e-4
+            weight_decay: 1e-2
+
+    task_name: task_name
+    make_data_pair: &make_data_pair false
+    stage: stage-2
+    stage_one_ckpt: path_to_stage_one_ckpt
+    lam_path: path_to_lam_checkpoint
+    goal_image_step: 32
+    action_dim: 7
+
+data:
+    data_root_dir: path_to_dataset_root
+    data_mix:
+        - data_mix_name
+    per_device_batch_size: 64
+    resize_resolution: 224
+    shuffle_buffer_size: 100
+    image_aug: true
+    goal_image_step: 32
+
+trainer:
+    max_epochs: 20
+    accelerator: gpu
+    num_nodes: 1
+    devices: 1
+    strategy: auto
+    precision: 16-mixed
+    log_every_n_steps: 1000
+    gradient_clip_val: 0.1
+
+    callbacks:
+        - class_path: lightning.pytorch.callbacks.ModelCheckpoint
+          init_args:
+              dirpath: ./logs/your_dir
+              verbose: true
+              save_last: true
+              save_top_k: -1
+              every_n_train_steps: 20000
+
+    logger:
+        - class_path: lightning.pytorch.loggers.TensorBoardLogger
+          init_args:
+              save_dir: ./logs
+              name: your_experiment_name

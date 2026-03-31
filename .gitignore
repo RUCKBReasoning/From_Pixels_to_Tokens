@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.DS_Store
+data_preprocess/image_based_lam/logs/
+data_preprocess/image_based_lam/swanlog/
