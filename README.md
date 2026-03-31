@@ -2,7 +2,6 @@
   <h1>LatentVLA</h1>
   <p><strong>From Pixels to Tokens: A Systematic Study of Latent Action Supervision for Vision-Language-Action Models</strong></p>
   <p>
-    <a href="./10019_From_Pixels_to_Tokens_A.pdf"><img alt="paper" src="https://img.shields.io/badge/Paper-PDF-1f6feb"></a>
     <a href="#training-latent-action-models"><img alt="latent action models" src="https://img.shields.io/badge/Latent_Action-Image_+_Action-f28c28"></a>
     <a href="#training-latentvla"><img alt="vla training" src="https://img.shields.io/badge/VLA-Qwen3--VL--2B-0f766e"></a>
     <a href="#method"><img alt="method" src="https://img.shields.io/badge/Method-4_Strategies-7c3aed"></a>
