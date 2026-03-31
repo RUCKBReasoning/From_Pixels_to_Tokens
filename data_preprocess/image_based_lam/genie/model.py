@@ -6,19 +6,28 @@ import numpy as np
 import piq
 import torch
 import torch.nn as nn
-import swanlab
 from PIL import Image
 from einops import rearrange
 from lightning import LightningModule
 from torch import Tensor
 from torch.optim import AdamW, Optimizer
 from accelerate import PartialState
+import os
+
+try:
+    import swanlab
+except ImportError:
+    swanlab = None
 
 OptimizerCallable = Callable[[Iterable], Optimizer]
 
 from .modules import UncontrolledDINOLatentActionModel, ControllableDINOLatentActionModel
 import logging
 logging.basicConfig(format='%(message)s', level=logging.INFO)
+
+
+def _use_swanlab() -> bool:
+    return os.environ.get("ENABLE_SWANLAB", "").lower() in {"1", "true", "yes"}
 
 
 
@@ -105,7 +114,8 @@ class DINO_LAM(LightningModule):
 
         self.task_name = task_name
         self.distributed_state = PartialState()
-        if self.distributed_state.is_main_process:
+        self.enable_swanlab = _use_swanlab() and swanlab is not None
+        if self.distributed_state.is_main_process and self.enable_swanlab:
             swanlab.init(name=task_name, reinit=True)
 
     def shared_step(self, batch: Dict) -> Tuple:
@@ -188,7 +198,7 @@ class DINO_LAM(LightningModule):
             sync_dist=True
         )
 
-        if self.distributed_state.is_main_process:
+        if self.distributed_state.is_main_process and self.enable_swanlab:
             swanlab.log({**{"train_loss": loss}, **{f"train/{k}": v for k, v in aux_losses}})
 
         return loss

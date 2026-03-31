@@ -13,12 +13,21 @@ from typing import Any, Dict, Optional, Protocol, Tuple, Union
 import jsonlines
 import numpy as np
 import torch
-import swanlab
+import os
+
+try:
+    import swanlab
+except ImportError:
+    swanlab = None
 
 from latentvla.overwatch import initialize_overwatch
 
 # Initialize Overwatch =>> Wraps `logging.Logger`
 overwatch = initialize_overwatch(__name__)
+
+
+def _use_swanlab() -> bool:
+    return os.environ.get("ENABLE_SWANLAB", "").lower() in {"1", "true", "yes"}
 
 
 # === Define Tracker Interface ===
@@ -61,7 +70,7 @@ class WeightsBiasesTracker:
         wandb: bool = True,
     ) -> None:
         self.run_id, self.run_dir, self.hparams = run_id, run_dir, hparams
-        self.wandb=wandb
+        self.wandb = wandb and _use_swanlab() and swanlab is not None
         # Get W&B-Specific Initialization Parameters
         self.project, self.entity, self.group, self.wandb_dir = project, entity, group, self.run_dir
 
@@ -94,8 +103,7 @@ class WeightsBiasesTracker:
     def finalize() -> None:
         if overwatch.is_rank_zero():
             try:
-                import swanlab
-                if getattr(swanlab, "run", None) is not None:
+                if swanlab is not None and getattr(swanlab, "run", None) is not None:
                     swanlab.finish()
             except Exception as e:
                 print(f"[WARN] Swanlab finalize skipped: {e}")

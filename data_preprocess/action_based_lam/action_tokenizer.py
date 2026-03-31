@@ -7,8 +7,17 @@ from dataclasses import dataclass, field
 from typing import Dict, List
 from data_provider.datasets import RLDSDataset
 from tqdm import tqdm
-import swanlab
+import os
+
+try:
+    import swanlab
+except ImportError:
+    swanlab = None
 from latentvla.models.constants import NUM_ACTIONS_CHUNK, ACTION_DIM
+
+
+def _use_swanlab() -> bool:
+    return os.environ.get("ENABLE_SWANLAB", "").lower() in {"1", "true", "yes"}
 
 def dct_1d(x):
     # x: (B, T, D)
@@ -223,7 +232,7 @@ def train_tokenizer(
             print(f"[step {step}] loss={loss.item():.4f}, "
                   f"recon={loss_recon.item():.4f}, mask={loss_mask.item():.4f}, "
                   f"vq={loss_vq.item():.4f}")
-        if use_swanlab:
+        if use_swanlab and swanlab is not None:
             swanlab.log({
                 "loss": loss.item(),
                 "loss_recon": loss_recon.item(),
@@ -277,7 +286,8 @@ def main(cfg: ActionConfig):
         list(vq.parameters()) +
         list(decoder.parameters()), lr=cfg.lr
     )
-    if cfg.use_swanlab:
+    enable_swanlab = cfg.use_swanlab and _use_swanlab() and swanlab is not None
+    if enable_swanlab:
         swanlab.init(
             project="action_tokenizer",
             config=cfg.__dict__,  # log config
@@ -289,7 +299,7 @@ def main(cfg: ActionConfig):
         num_steps=cfg.num_steps,
         save_every=cfg.save_every,
         device=device,
-        use_swanlab=cfg.use_swanlab,
+        use_swanlab=enable_swanlab,
     )
 
 

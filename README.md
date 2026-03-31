@@ -36,7 +36,7 @@ This project follows two complementary perspectives from the paper:
   <img src="asserts/Figure_2.png" alt="LatentVLA architecture" width="100%">
 </p>
 
-All methods share the same VLA backbone and action head, and differ only in how latent supervision is injected. The main VLA implementations live in [latentvla/models/vla](/Users/linyihan/Documents/GitHub/LatentVLA/latentvla/models/vla).
+All methods share the same VLA backbone and action head, and differ only in how latent supervision is injected. The main VLA implementations live in [`latentvla/models/vla`](./latentvla/models/vla).
 
 ## Installation
 
@@ -52,7 +52,7 @@ The repository assumes RLDS-style datasets for both latent action preprocessing 
 
 ### A. Image-based latent action model
 
-The image-based latent action model is in [data_preprocess/image_based_lam](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/image_based_lam). It follows a UniVLA-style image-based latent action pipeline and is the part used to produce latent supervision for `LA-Align`, `LA-Direct`, and `LA-Cond`.
+The image-based latent action model is in [`data_preprocess/image_based_lam`](./data_preprocess/image_based_lam). It follows a UniVLA-style image-based latent action pipeline and is the part used to produce latent supervision for `LA-Align`, `LA-Direct`, and `LA-Cond`.
 
 Before post-training on your dataset, download the two public [UniVLA checkpoints](https://github.com/OpenDriveLab/UniVLA):
 
@@ -63,7 +63,7 @@ These checkpoints are used as initialization because it performs dataset-specifi
 
 #### Training
 
-Edit [config/lam-stage-2.yaml](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/image_based_lam/config/lam-stage-2.yaml):
+Edit [`data_preprocess/image_based_lam/config/lam-stage-2.yaml`](./data_preprocess/image_based_lam/config/lam-stage-2.yaml):
 
 - `model.lam_path`
 - `model.stage_one_ckpt`
@@ -82,7 +82,7 @@ torchrun --standalone --nnodes 1 --nproc-per-node 1 main.py fit \
 
 ### B. Annotate RLDS data with image-based latent labels
 
-After training the image-based model, use [latent.py](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/image_based_lam/latent.py) to annotate trajectories with latent labels. The current script gives a `LIBERO`-style TFRecord example and writes:
+After training the image-based model, use [`data_preprocess/image_based_lam/latent.py`](./data_preprocess/image_based_lam/latent.py) to annotate trajectories with latent labels. The current script gives a `LIBERO`-style TFRecord example and writes:
 
 - `steps/latent_idx`
 - `steps/latent_z`
@@ -104,11 +104,11 @@ The script writes a new TFRecord file into a sibling `output/` directory next to
 
 ### C. Action-based latent action model
 
-The action-based latent action model is in [data_preprocess/action_based_lam](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/action_based_lam). This one is trained from scratch in this repository and is used by `LA-Tok`.
+The action-based latent action model is in [`data_preprocess/action_based_lam`](./data_preprocess/action_based_lam). This one is trained from scratch in this repository and is used by `LA-Tok`.
 
 The tokenizer learns a VQ-style discrete latent space over action chunks and saves checkpoints of the form `tokenizer_step_*.pt`.
 
-You can launch training with [action.sh](/Users/linyihan/Documents/GitHub/LatentVLA/data_preprocess/action_based_lam/action.sh) after editing:
+You can launch training with [`data_preprocess/action_based_lam/action.sh`](./data_preprocess/action_based_lam/action.sh) after editing:
 
 - `--data-root-dir`
 - `--data-mix`
@@ -124,7 +124,7 @@ bash action.sh
 
 ## Training LatentVLA
 
-The main training entry is [exp/train_vla.py](/Users/linyihan/Documents/GitHub/LatentVLA/exp/train_vla.py).
+The main training entry is [`exp/train_vla.py`](./exp/train_vla.py).
 
 Before VLA training, first download the `Qwen3-VL-2B` [checkpoint](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct) and set:
 
@@ -197,9 +197,10 @@ For `la_tok`, also add:
 
 ## Notes
 
-- Robot-specific constants are selected in [latentvla/models/constants.py](/Users/linyihan/Documents/GitHub/LatentVLA/latentvla/models/constants.py) by parsing command-line arguments. If your dataset name does not clearly indicate the robot platform, adjust that file manually.
+- Robot-specific constants are selected in [`latentvla/models/constants.py`](./latentvla/models/constants.py) by parsing command-line arguments. If your dataset name does not clearly indicate the robot platform, adjust that file manually.
 - The codebase expects RLDS-format training data.
 - Some preprocessing scripts still contain placeholder paths and should be edited before first use.
+- `swanlab` logging is opt-in. It will only initialize when you explicitly set `ENABLE_SWANLAB=1`.
 
 ## Acknowledgements
 
