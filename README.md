@@ -1,6 +1,9 @@
 <div align="center">
   <h1>From Pixels to Tokens: A Systematic Study of Latent Action Supervision for Vision-Language-Action Models</h1>
   <p>
+    <strong>Language / 语言:</strong> <strong>English</strong> | <a href="./README_zh.md">中文</a>
+  </p>
+  <p>
     <a href="#training-latent-action-models"><img alt="latent action models" src="https://img.shields.io/badge/Latent_Action-Image_+_Action-f28c28"></a>
     <a href="#training-latentvla"><img alt="vla training" src="https://img.shields.io/badge/VLA-Qwen3--VL--2B-0f766e"></a>
     <a href="#method"><img alt="method" src="https://img.shields.io/badge/Method-4_Strategies-7c3aed"></a>
@@ -46,7 +49,17 @@ Install dependencies from the project root:
 pip install -r requirements.txt
 ```
 
+## Data Preparation
+
 The repository assumes RLDS-style datasets for both latent action preprocessing and VLA training.
+
+Public RLDS-format datasets used in this project include:
+
+- [LIBERO](https://huggingface.co/datasets/openvla/modified_libero_rlds)
+- [RoboTwin 2.0](https://huggingface.co/datasets/TianxingChen/RoboTwin2.0)
+- [JAKA dataset](https://huggingface.co/CokeAnd1ce/From_Pixels_to_Tokens)
+
+After downloading and preparing the dataset locally, point `data_root_dir` to the dataset root.
 
 ## Training Latent Action Models
 
@@ -132,6 +145,8 @@ Before VLA training, first download the `Qwen3-VL-2B` [checkpoint](https://huggi
 --vlm_path /path/to/Qwen3-VL-2B
 ```
 
+For the simulation benchmark, checkpoints are available on Hugging Face: [simulation benchmark ckpts](https://huggingface.co/CokeAnd1ce/From_Pixels_to_Tokens)
+
 Supported `--vla_id` values:
 
 - `baseline`
@@ -146,6 +161,7 @@ Before launching training, make sure you set:
 - `--data_root_dir` to the RLDS dataset root
 - `--data_mix` to the target dataset split or mixture
 - `--action_tokenizer_ckpt` when training `la_tok`
+- `--pretrained_checkpoint` and `--from_pretrained True` when loading a checkpoint for continued training or evaluation
 
 Example baseline command:
 
