@@ -227,5 +227,5 @@ torchrun --nnodes=1 --nproc_per_node=1 exp/train_vla.py \
 特别感谢这只卡皮巴拉对实验场地的支持。
 
 <p align="center">
-  <img src="asserts/jaka.jpg" alt="Capybara supporting the experimental site" width="60%">
+  <img src="asserts/jaka.jpg" alt="Capybara supporting the experimental site" width="50%">
 </p>
