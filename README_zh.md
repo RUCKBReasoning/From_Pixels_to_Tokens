@@ -4,9 +4,9 @@
     <strong>Language / 语言:</strong> <a href="./README.md">English</a> | <strong>中文</strong>
   </p>
   <p>
-    <a href="#潜在动作模型训练"><img alt="latent action models" src="https://img.shields.io/badge/Latent_Action-Image_+_Action-f28c28"></a>
-    <a href="#训练"><img alt="vla training" src="https://img.shields.io/badge/VLA-Qwen3--VL--2B-0f766e"></a>
-    <a href="#方法"><img alt="method" src="https://img.shields.io/badge/Method-4_Strategies-7c3aed"></a>
+    <a href="https://arxiv.org/abs/2605.04678">✍️ <strong>论文（arXiv）</strong></a> |
+    <a href="https://github.com/RUCKBReasoning/From_Pixels_to_Tokens">💻 <strong>代码</strong></a> |
+    <a href="https://huggingface.co/CokeAnd1ce/From_Pixels_to_Tokens">🤗 <strong>Checkpoints, 数据集</strong></a> |
   </p>
 </div>
 
@@ -33,7 +33,7 @@
 - Image-based latent actions for trajectory regularization
 - Action-based latent actions for target-space unification
 
-## 方法
+## 🧩 方法
 
 <p align="center">
   <img src="asserts/Figure_2.png" alt="Architecture" width="100%">
@@ -41,7 +41,7 @@
 
 所有方法共享同一个 VLA backbone 和 action head，差异仅在于 latent supervision 的注入方式。主要的 VLA 实现位于 [`latentvla/models/vla`](./latentvla/models/vla)。
 
-## 安装
+## 📦 安装
 
 在项目根目录安装依赖：
 
@@ -49,7 +49,7 @@
 pip install -r requirements.txt
 ```
 
-## 数据准备
+## 💾 数据准备
 
 本仓库默认使用 RLDS format 数据，适用于 latent action preprocessing 和 VLA training。
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 下载并在本地整理完成后，将 `data_root_dir` 指向 dataset root directory。
 
-## 潜在动作模型训练
+## ⚙️ 潜在动作模型训练
 
 ### A. Image-based latent action model
 
@@ -135,7 +135,7 @@ cd data_preprocess/action_based_lam
 bash action.sh
 ```
 
-## 训练
+## 🚀 训练
 
 主训练入口为 [`exp/train_vla.py`](./exp/train_vla.py)。
 
@@ -211,14 +211,14 @@ torchrun --nnodes=1 --nproc_per_node=1 exp/train_vla.py \
 --action_tokenizer_ckpt /path/to/tokenizer_step_xxxxx.pt
 ```
 
-## 说明
+## 📝 说明
 
 - 机器人相关 constants 会通过命令行参数在 [`latentvla/models/constants.py`](./latentvla/models/constants.py) 中自动选择。如果你的 dataset name 不能清楚表明 robot platform，需要手动调整该文件。
 - 代码默认要求 training data 为 RLDS format。
 - 一些 preprocessing scripts 仍保留 placeholder paths，首次使用前需要手动修改。
 - `swanlab` logging 为可选项。只有显式设置 `ENABLE_SWANLAB=1` 时才会初始化。
 
-## 致谢
+## 🙏 致谢
 
 感谢 [OpenVLA](https://github.com/openvla/openvla)、[UniVLA](https://github.com/OpenDriveLab/UniVLA)、[StarVLA](https://github.com/starVLA/starVLA) 和 [VLA-Adapter](https://github.com/OpenHelix-Team/VLA-Adapter) 的开源工作！
 

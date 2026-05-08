@@ -4,15 +4,20 @@
     <strong>Language / 语言:</strong> <strong>English</strong> | <a href="./README_zh.md">中文</a>
   </p>
   <p>
-    <a href="#training-latent-action-models"><img alt="latent action models" src="https://img.shields.io/badge/Latent_Action-Image_+_Action-f28c28"></a>
-    <a href="#training-latentvla"><img alt="vla training" src="https://img.shields.io/badge/VLA-Qwen3--VL--2B-0f766e"></a>
-    <a href="#method"><img alt="method" src="https://img.shields.io/badge/Method-4_Strategies-7c3aed"></a>
+    <a href="https://arxiv.org/abs/2605.04678">✍️ <strong>Paper (arXiv)</strong></a> |
+    <a href="https://github.com/RUCKBReasoning/From_Pixels_to_Tokens">💻 <strong>Code</strong></a> |
+    <a href="https://huggingface.co/CokeAnd1ce/From_Pixels_to_Tokens">🤗 <strong>Checkpoints, Dataset</strong></a> |
   </p>
 </div>
 
 <p align="center">
   <img src="asserts/Figure_1.png" alt="Overview" width="100%">
 </p>
+
+## ✨ News ✨
+
+- [2026/05/06] Our paper is now available on arXiv. We also release the project code, checkpoints, and dataset.
+- [2026/05/01] Our paper was accepted as an ICML 2026 Spotlight.
 
 ## Overview
 
@@ -33,7 +38,7 @@ This project follows two complementary perspectives from the paper:
 - Image-based latent actions for trajectory regularization
 - Action-based latent actions for target-space unification
 
-## Method
+## 🧩 Method
 
 <p align="center">
   <img src="asserts/Figure_2.png" alt="Architecture" width="100%">
@@ -41,7 +46,7 @@ This project follows two complementary perspectives from the paper:
 
 All methods share the same VLA backbone and action head, and differ only in how latent supervision is injected. The main VLA implementations live in [`latentvla/models/vla`](./latentvla/models/vla).
 
-## Installation
+## 📦 Installation
 
 Install dependencies from the project root:
 
@@ -49,7 +54,7 @@ Install dependencies from the project root:
 pip install -r requirements.txt
 ```
 
-## Data Preparation
+## 💾 Data Preparation
 
 The repository assumes RLDS-style datasets for both latent action preprocessing and VLA training.
 
@@ -61,7 +66,7 @@ Public RLDS-format datasets used in this project include:
 
 After downloading and preparing the dataset locally, point `data_root_dir` to the dataset root.
 
-## Training Latent Action Models
+## ⚙️ Training Latent Action Models
 
 ### A. Image-based latent action model
 
@@ -135,7 +140,7 @@ cd data_preprocess/action_based_lam
 bash action.sh
 ```
 
-## Training
+## 🚀 Training
 
 The main training entry is [`exp/train_vla.py`](./exp/train_vla.py).
 
@@ -211,13 +216,13 @@ For `la_tok`, also add:
 --action_tokenizer_ckpt /path/to/tokenizer_step_xxxxx.pt
 ```
 
-## Notes
+## 📝 Notes
 
 - Robot-specific constants are selected in [`latentvla/models/constants.py`](./latentvla/models/constants.py) by parsing command-line arguments. If your dataset name does not clearly indicate the robot platform, adjust that file manually.
 - The codebase expects RLDS-format training data.
 - Some preprocessing scripts still contain placeholder paths and should be edited before first use.
 - `swanlab` logging is opt-in. It will only initialize when you explicitly set `ENABLE_SWANLAB=1`.
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 We thank [OpenVLA](https://github.com/openvla/openvla), [UniVLA](https://github.com/OpenDriveLab/UniVLA), [StarVLA](https://github.com/starVLA/starVLA), and [VLA-Adapter](https://github.com/OpenHelix-Team/VLA-Adapter) for their open-sourced work!
